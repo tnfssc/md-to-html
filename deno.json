@@ -1,0 +1,25 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts"
+  },
+  "imports": {
+    "@hono/hono": "jsr:@hono/hono@^4.9.2",
+    "@rehype-pretty/transformers": "npm:@rehype-pretty/transformers@^0.13.2",
+    "@shikijs/rehype": "npm:@shikijs/rehype@^3.9.2",
+    "@shikijs/twoslash": "npm:@shikijs/twoslash@^3.9.2",
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/crypto": "jsr:@std/crypto@^1.0.5",
+    "@types/node": "npm:@types/node@^24.3.0",
+    "rehype-mathjax": "npm:rehype-mathjax@^7.1.0",
+    "rehype-raw": "npm:rehype-raw@^7.0.0",
+    "rehype-stringify": "npm:rehype-stringify@^10.0.1",
+    "remark-code-title": "npm:remark-code-title@^0.2.5",
+    "remark-frontmatter": "npm:remark-frontmatter@^5.0.0",
+    "remark-gemoji": "npm:remark-gemoji@^8.0.0",
+    "remark-gfm": "npm:remark-gfm@^4.0.1",
+    "remark-parse": "npm:remark-parse@^11.0.0",
+    "remark-rehype": "npm:remark-rehype@^11.1.2",
+    "unified": "npm:unified@^11.0.5",
+    "unist-util-visit": "npm:unist-util-visit@^5.0.0"
+  }
+}
