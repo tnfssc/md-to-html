@@ -9,6 +9,8 @@ import rehypeMathjax from "rehype-mathjax";
 import rehypeStringify from "rehype-stringify";
 import remarkCodeTitle from "remark-code-title";
 import remarkFrontmatter from "remark-frontmatter";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeExtenalLinks from "rehype-external-links";
 import { transformerTwoslash } from "@shikijs/twoslash";
 import { transformerCopyButton } from "@rehype-pretty/transformers";
 import { visit } from "unist-util-visit";
@@ -45,6 +47,8 @@ export const remarked = (md: string): Promise<string> =>
       ],
     })
     .use(rehypeImg)
+    .use(rehypeAutolinkHeadings)
+    .use(rehypeExtenalLinks)
     .use(rehypeStringify)
     .process(md)
     .then(String);

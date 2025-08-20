@@ -9,6 +9,8 @@
     "npm:@shikijs/rehype@^3.9.2": "3.9.2",
     "npm:@shikijs/twoslash@^3.9.2": "3.9.2_typescript@5.9.2",
     "npm:@types/node@^24.3.0": "24.3.0",
+    "npm:rehype-autolink-headings@^7.1.0": "7.1.0",
+    "npm:rehype-external-links@3": "3.0.0",
     "npm:rehype-mathjax@^7.1.0": "7.1.0",
     "npm:rehype-raw@7": "7.0.0",
     "npm:rehype-stringify@^10.0.1": "10.0.1",
@@ -236,6 +238,12 @@
         "web-namespaces"
       ]
     },
+    "hast-util-heading-rank@3.0.0": {
+      "integrity": "sha512-EJKb8oMUXVHcWZTDepnr+WNbfnXKFNf9duMesmr4S8SXTJBJ9M4Yok08pu9vxdJwdlGRhVumk9mEhkEvKGifwA==",
+      "dependencies": [
+        "@types/hast"
+      ]
+    },
     "hast-util-is-element@3.0.0": {
       "integrity": "sha512-Val9mnv2IWpLbNPqc/pUem+a7Ipj2aHacCwgNfTiK0vJKl0LF+4Ba4+v1oPHFpf3bLYmreq0/l3Gud9S5OH42g==",
       "dependencies": [
@@ -327,6 +335,9 @@
     },
     "html-void-elements@3.0.0": {
       "integrity": "sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg=="
+    },
+    "is-absolute-url@4.0.1": {
+      "integrity": "sha512-/51/TKE88Lmm7Gc4/8btclNXWS+g50wXhYJq8HWIBAGUBnoAdRu1aXeh364t/O7wXDAcTJDP8PNuNKWUDWie+A=="
     },
     "is-plain-obj@4.1.0": {
       "integrity": "sha512-+Pgi+vMuUNkJyExiMBt5IlFoMyKnr5zhJ4Uspz58WOhBF5QoIZkFyNHIbBAtHwzVAgk5RtndVNsDRN61/mmDqg=="
@@ -780,6 +791,28 @@
         "regex-utilities"
       ]
     },
+    "rehype-autolink-headings@7.1.0": {
+      "integrity": "sha512-rItO/pSdvnvsP4QRB1pmPiNHUskikqtPojZKJPPPAVx9Hj8i8TwMBhofrrAYRhYOOBZH9tgmG5lPqDLuIWPWmw==",
+      "dependencies": [
+        "@types/hast",
+        "@ungap/structured-clone",
+        "hast-util-heading-rank",
+        "hast-util-is-element",
+        "unified",
+        "unist-util-visit@5.0.0"
+      ]
+    },
+    "rehype-external-links@3.0.0": {
+      "integrity": "sha512-yp+e5N9V3C6bwBeAC4n796kc86M4gJCdlVhiMTxIrJG5UHDMh+PJANf9heqORJbt1nrCbDwIlAZKjANIaVBbvw==",
+      "dependencies": [
+        "@types/hast",
+        "@ungap/structured-clone",
+        "hast-util-is-element",
+        "is-absolute-url",
+        "space-separated-tokens",
+        "unist-util-visit@5.0.0"
+      ]
+    },
     "rehype-mathjax@7.1.0": {
       "integrity": "sha512-mJHNpoqCC5UZ24OKx0wNjlzV18qeJz/Q/LtEjxXzt8vqrZ1Z3GxQnVrHcF5/PogcXUK8cWwJ4U/LWOQWEiABHw==",
       "dependencies": [
@@ -1039,6 +1072,8 @@
       "npm:@shikijs/rehype@^3.9.2",
       "npm:@shikijs/twoslash@^3.9.2",
       "npm:@types/node@^24.3.0",
+      "npm:rehype-autolink-headings@^7.1.0",
+      "npm:rehype-external-links@3",
       "npm:rehype-mathjax@^7.1.0",
       "npm:rehype-raw@7",
       "npm:rehype-stringify@^10.0.1",
