@@ -21,7 +21,8 @@ const app = new Hono().post("/", async (c) => {
   const apiKey = c.req.header("x-api-key") ?? "";
   if (!safeCompare(apiKey, envApiKey)) return c.json(void 0, 401);
   const markdown = await c.req.text();
-  const html = await remarked(markdown);
+  const { html, frontmatter } = await remarked(markdown);
+  c.header("x-frontmatter", JSON.stringify(frontmatter));
   return c.html(html);
 });
 

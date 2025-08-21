@@ -1,3 +1,4 @@
+import grayMatter from "gray-matter";
 import { unified, type Plugin } from "unified";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -29,8 +30,10 @@ export const rehypeImg: Plugin = () => {
     return rootNode;
   };
 };
-export const remarked = (md: string): Promise<string> =>
-  unified()
+export const remarked = async (md: string) => {
+  const matter = grayMatter(md);
+
+  const html = await unified()
     .use(remarkParse, { fragment: true })
     .use(remarkFrontmatter)
     .use(remarkGfm)
@@ -50,5 +53,10 @@ export const remarked = (md: string): Promise<string> =>
     .use(rehypeAutolinkHeadings)
     .use(rehypeExtenalLinks)
     .use(rehypeStringify)
-    .process(md)
+    .process(matter.content)
     .then(String);
+  return {
+    html,
+    frontmatter: matter.data,
+  };
+};
