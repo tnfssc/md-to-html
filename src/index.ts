@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { remarked } from "./remarked.ts";
+import { remarked } from "./remarked";
 
 const encoder = new TextEncoder();
 export function safeCompare(a: string, b: string): boolean {
