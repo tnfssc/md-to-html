@@ -1,4 +1,4 @@
-import { Hono } from "@hono/hono";
+import { Hono } from "hono";
 import { remarked } from "./remarked.ts";
 
 const encoder = new TextEncoder();
@@ -15,7 +15,7 @@ export function safeCompare(a: string, b: string): boolean {
   return result === 0;
 }
 
-const envApiKey = Deno.env.get("API_KEY") ?? "";
+const envApiKey = process.env.API_KEY ?? "";
 
 const app = new Hono().post("/", async (c) => {
   const apiKey = c.req.header("x-api-key") ?? "";
@@ -26,4 +26,4 @@ const app = new Hono().post("/", async (c) => {
   return c.html(html);
 });
 
-Deno.serve(app.fetch);
+export default app;
