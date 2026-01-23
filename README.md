@@ -28,7 +28,7 @@
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/md-to-html.git
+git clone https://github.com/tnfssc/md-to-html.git
 cd md-to-html
 bun install
 ```
@@ -48,7 +48,7 @@ bun run typecheck
 
 ## 🔌 API Usage
 
-**POST** `/
+**POST** `/`
 
 Converts Markdown content in the body to HTML.
 
@@ -70,3 +70,10 @@ curl -X POST http://localhost:3000/ \
   -H "x-api-key: your-secret-key" \
   -d "# Hello World"
 ```
+
+## 📚 Documentation
+
+The API comes with built-in interactive documentation:
+
+- **OpenAPI Spec**: `/openapi.json`
+- **API Reference (Scalar)**: `/scalar`

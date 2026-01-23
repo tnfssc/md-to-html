@@ -53,4 +53,29 @@ describe("Hono App", () => {
     expect(body).toContain('referrerpolicy="no-referrer"');
     expect(body).toContain('class="w-full rounded-xl"');
   });
+
+  test("GET /openapi.json returns OpenAPI spec", async () => {
+    const res = await app.request("/openapi.json");
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as unknown;
+    expect(body).toBeObject();
+    if (typeof body !== "object" || body === null) return;
+    expect("openapi" in body).toBe(true);
+    if (!("openapi" in body)) return;
+    expect(body.openapi).toBe("3.0.0");
+    expect("info" in body).toBe(true);
+    if (!("info" in body)) return;
+    expect(typeof body.info).toBe("object");
+    if (typeof body.info !== "object" || body.info === null) return;
+    expect("title" in body.info).toBe(true);
+    if (!("title" in body.info)) return;
+    expect(body.info.title).toBe("MD to HTML API");
+  });
+
+  test("GET /scalar returns Scalar UI", async () => {
+    const res = await app.request("/scalar");
+    expect(res.status).toBe(200);
+    const body = await res.text();
+    expect(body).toContain("<!doctype html>");
+  });
 });

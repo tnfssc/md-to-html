@@ -1,10 +1,11 @@
 import type { Element } from "hast";
 
+import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { transformerCopyButton } from "@rehype-pretty/transformers";
+import { Scalar } from "@scalar/hono-api-reference";
 import rehypeShiki from "@shikijs/rehype";
 import { transformerTwoslash } from "@shikijs/twoslash";
 import grayMatter from "gray-matter";
-import { Hono } from "hono";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeExtenalLinks from "rehype-external-links";
 import rehypeMathjax from "rehype-mathjax";
@@ -77,14 +78,82 @@ export function safeCompare(a: string, b: string): boolean {
   return result === 0;
 }
 
-const app = new Hono().post("/", async (c) => {
+const app = new OpenAPIHono();
+
+const route = createRoute({
+  method: "post",
+  path: "/",
+  request: {
+    body: {
+      content: {
+        "text/plain": {
+          schema: z.string().openapi({
+            example: "# Hello World",
+          }),
+        },
+      },
+    },
+    headers: z.object({
+      "x-api-key": z
+        .string()
+        .optional()
+        .openapi({
+          example: "your-api-key",
+          param: {
+            in: "header",
+            name: "x-api-key",
+          },
+        }),
+    }),
+  },
+  responses: {
+    200: {
+      content: {
+        "text/html": {
+          schema: z.string(),
+        },
+      },
+      description: "HTML output",
+      headers: z.object({
+        "x-frontmatter": z.string().openapi({
+          description: "JSON string of frontmatter",
+        }),
+      }),
+    },
+    401: {
+      description: "Unauthorized",
+    },
+  },
+});
+
+app.openapi(route, async (c) => {
   const envApiKey = process.env.API_KEY ?? "";
   const apiKey = c.req.header("x-api-key") ?? "";
-  if (!safeCompare(apiKey, envApiKey)) return c.json(void 0, 401);
+
+  if (!safeCompare(apiKey, envApiKey)) {
+    return c.json(undefined, 401);
+  }
+
   const markdown = await c.req.text();
   const { frontmatter, html } = await remarked(markdown);
+
   c.header("x-frontmatter", JSON.stringify(frontmatter));
   return c.html(html);
 });
+
+// The OpenAPI documentation will be available at /openapi.json
+app.doc("/openapi.json", {
+  info: {
+    title: "MD to HTML API",
+    version: "1.0.0",
+  },
+  openapi: "3.0.0",
+});
+
+// The Scalar reference will be available at /scalar
+app.get(
+  "/scalar",
+  Scalar(() => ({ url: "/openapi.json" })),
+);
 
 export default app;
