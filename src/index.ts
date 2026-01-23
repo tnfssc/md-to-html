@@ -1,32 +1,32 @@
-import { Hono } from "hono";
-import grayMatter from "gray-matter";
-import { unified, type Plugin } from "unified";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
-import remarkParse from "remark-parse";
-import remarkRehype from "remark-rehype";
-import remarkGemoji from "remark-gemoji";
+import type { Element } from "hast";
+
+import { transformerCopyButton } from "@rehype-pretty/transformers";
 import rehypeShiki from "@shikijs/rehype";
+import { transformerTwoslash } from "@shikijs/twoslash";
+import grayMatter from "gray-matter";
+import { Hono } from "hono";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeExtenalLinks from "rehype-external-links";
 import rehypeMathjax from "rehype-mathjax";
+import rehypeRaw from "rehype-raw";
 import rehypeStringify from "rehype-stringify";
 import remarkCodeTitle from "remark-code-title";
 import remarkFrontmatter from "remark-frontmatter";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeExtenalLinks from "rehype-external-links";
-import { transformerTwoslash } from "@shikijs/twoslash";
-import { transformerCopyButton } from "@rehype-pretty/transformers";
+import remarkGemoji from "remark-gemoji";
+import remarkGfm from "remark-gfm";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import { type Plugin, unified } from "unified";
 import { visit } from "unist-util-visit";
 
 const rehypeImg: Plugin = () => {
   return (rootNode) => {
-    visit(rootNode, (node) => {
-      if (node.type !== "element") return;
-      // @ts-expect-error - abc
+    visit(rootNode, "element", (node: Element) => {
       if (node.tagName !== "img") return;
-      // @ts-expect-error - abc
-      node.properties.referrerpolicy = "no-referrer";
-      // @ts-expect-error - abc
-      node.properties.class = "w-full rounded-xl";
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      node.properties ||= {};
+      node.properties.referrerPolicy = "no-referrer";
+      node.properties.className = ["w-full", "rounded-xl"];
     });
     return rootNode;
   };
@@ -48,7 +48,7 @@ const remarked = async (md: string) => {
       themes: { dark: "dark-plus", light: "dark-plus" },
       transformers: [
         transformerTwoslash({ explicitTrigger: true }),
-        transformerCopyButton({ visibility: "always", feedbackDuration: 3000 }),
+        transformerCopyButton({ feedbackDuration: 3000, visibility: "always" }),
       ],
     })
     .use(rehypeImg)
@@ -58,8 +58,8 @@ const remarked = async (md: string) => {
     .process(matter.content)
     .then(String);
   return {
-    html,
     frontmatter: matter.data,
+    html,
   };
 };
 
@@ -77,13 +77,12 @@ export function safeCompare(a: string, b: string): boolean {
   return result === 0;
 }
 
-const envApiKey = process.env.API_KEY ?? "";
-
 const app = new Hono().post("/", async (c) => {
+  const envApiKey = process.env.API_KEY ?? "";
   const apiKey = c.req.header("x-api-key") ?? "";
   if (!safeCompare(apiKey, envApiKey)) return c.json(void 0, 401);
   const markdown = await c.req.text();
-  const { html, frontmatter } = await remarked(markdown);
+  const { frontmatter, html } = await remarked(markdown);
   c.header("x-frontmatter", JSON.stringify(frontmatter));
   return c.html(html);
 });
