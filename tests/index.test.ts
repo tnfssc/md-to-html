@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import app, { safeCompare } from "./index";
+import app, { safeCompare } from "../src/index";
 
 describe("safeCompare", () => {
   test("returns true for identical strings", () => {

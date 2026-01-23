@@ -11,17 +11,6 @@ const tsFiles = ["**/*.{ts,tsx}"];
 /** @param {import("eslint").Linter.FlatConfig[]} configs */
 const scopeToTs = (configs) => configs.map((config) => (config.files ? config : { ...config, files: tsFiles }));
 
-/** @type {Record<string, "readonly" | "writable">} */
-const nodeGlobals = {
-  Buffer: "readonly",
-  clearInterval: "readonly",
-  clearTimeout: "readonly",
-  console: "readonly",
-  process: "readonly",
-  setInterval: "readonly",
-  setTimeout: "readonly",
-};
-
 export default defineConfig(
   {
     ignores: ["node_modules", "dist"],
@@ -29,12 +18,6 @@ export default defineConfig(
   eslint.configs.recommended,
   perfectionist.configs["recommended-alphabetical"],
   preferArrayAt.configs.recommended,
-  {
-    files: ["scripts/**/*.{js,cjs,mjs}"],
-    languageOptions: {
-      globals: nodeGlobals,
-    },
-  },
   {
     files: tsFiles,
     languageOptions: {
