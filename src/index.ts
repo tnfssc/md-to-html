@@ -1,5 +1,6 @@
 import type { Element } from "hast";
 
+import "hono";
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { transformerCopyButton } from "@rehype-pretty/transformers";
 import { Scalar } from "@scalar/hono-api-reference";
